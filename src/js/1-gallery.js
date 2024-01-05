@@ -66,65 +66,52 @@ document.addEventListener("DOMContentLoaded", function() {
       ];
       const galleryContainer = document.querySelector('.gallery');
       let currentLightboxInstance = null;
-    
+  
       function initializeLightbox() {
-        currentLightboxInstance = new SimpleLightbox('.gallery a.gallery-link', {
-          captionsData: 'alt',
-          captionDelay: 250,
-          onShow: () => {
-            document.addEventListener('keydown', onKeyPress);
-          },
-          onClose: () => {
-            document.removeEventListener('keydown', onKeyPress);
-          },
-        });
-    
-        // Додаємо обробник події instance, який викликається після створення екземпляра
-        currentLightboxInstance.on('instance', (instance) => {
-          // Отримуємо елемент фону лайтбоксу та встановлюємо фон
-          const overlayElement = instance.elements.overlay;
-          if (overlayElement) {
-            overlayElement.style.backgroundColor = 'rgba(46, 47, 66, 0.80)';
-          }
-        });
+          currentLightboxInstance = new SimpleLightbox('.gallery a.gallery-link', {
+              captionsData: 'alt',
+              captionDelay: 250,
+          });
       }
-    
+  
       function onKeyPress(event) {
-        if (event.key === 'Escape' && currentLightboxInstance && currentLightboxInstance.visible) {
-          currentLightboxInstance.close();
-          currentLightboxInstance = null;
-        }
+          if (event.key === 'Escape' && currentLightboxInstance && currentLightboxInstance.visible) {
+              currentLightboxInstance.close();
+          }
       }
-    
+  
       function createGalleryItem(image) {
-        const galleryItem = document.createElement('li');
-        galleryItem.classList.add('gallery-item');
-    
-        const galleryLink = document.createElement('a');
-        galleryLink.classList.add('gallery-link');
-        galleryLink.href = image.original;
-        galleryLink.download = 'false';
-    
-        const galleryImage = document.createElement('img');
-        galleryImage.classList.add('gallery-image');
-        galleryImage.src = image.preview;
-        galleryImage.alt = image.description;
-        galleryImage.width = 800;
-        galleryImage.height = 600;
-    
-        galleryLink.appendChild(galleryImage);
-        galleryItem.appendChild(galleryLink);
-    
-        return galleryItem;
+          const galleryItem = document.createElement('li');
+          galleryItem.classList.add('gallery-item');
+  
+          const galleryLink = document.createElement('a');
+          galleryLink.classList.add('gallery-link');
+          galleryLink.href = image.original;
+          galleryLink.download = 'false';
+  
+          const galleryImage = document.createElement('img');
+          galleryImage.classList.add('gallery-image');
+          galleryImage.src = image.preview;
+          galleryImage.alt = image.description;
+          galleryImage.width = 800;
+          galleryImage.height = 600;
+  
+          galleryLink.appendChild(galleryImage);
+          galleryItem.appendChild(galleryLink);
+  
+          return galleryItem;
       }
-    
+  
       function renderGallery() {
-        images.forEach(image => {
-          const galleryItem = createGalleryItem(image);
-          galleryContainer.appendChild(galleryItem);
-        });
+          galleryContainer.innerHTML = ''; 
+          images.forEach(image => {
+              const galleryItem = createGalleryItem(image);
+              galleryContainer.appendChild(galleryItem);
+          });
       }
-    
+  
       renderGallery();
       initializeLightbox();
-    });
+  
+      document.addEventListener('keydown', onKeyPress);
+  });
